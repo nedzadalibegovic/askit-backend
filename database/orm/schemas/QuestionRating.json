@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "QuestionRating record schema",
+  "required": ["QuestionID", "UserID", "Rating"],
+  "properties": {
+    "QuestionID": {
+      "$id": "#/properties/QuestionID",
+      "type": "integer"
+    },
+    "UserID": {
+      "$id": "#/properties/UserID",
+      "type": "integer"
+    },
+    "Rating": {
+      "$id": "#/properties/Rating",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

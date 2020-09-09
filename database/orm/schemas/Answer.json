@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "Answer record schema",
+  "required": ["QuestionID", "UserID", "Body"],
+  "properties": {
+    "QuestionID": {
+      "$id": "#/properties/QuestionID",
+      "type": "integer"
+    },
+    "UserID": {
+      "$id": "#/properties/UserID",
+      "type": "integer"
+    },
+    "Body": {
+      "$id": "#/properties/Body",
+      "type": "string"
+    },
+    "RatingCount": {
+      "$id": "#/properties/RatingCount",
+      "type": "integer",
+      "default": 0
+    }
+  },
+  "additionalProperties": false
+}

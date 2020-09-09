@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "User record schema",
+  "required": ["Email", "Password"],
+  "properties": {
+    "UserID": {
+      "$id": "#/properties/UserID",
+      "type": "integer"
+    },
+    "FirstName": {
+      "$id": "#/properties/FirstName",
+      "type": "string"
+    },
+    "LastName": {
+      "$id": "#/properties/LastName",
+      "type": "string"
+    },
+    "Email": {
+      "$id": "#/properties/Email",
+      "type": "string",
+      "format": "email"
+    },
+    "Password": {
+      "$id": "#/properties/Password",
+      "type": "string"
+    },
+    "Token": {
+      "$id": "#/properties/Token",
+      "type": "string"
+    },
+    "AnswerCount": {
+      "$id": "#/properties/AnswerCount",
+      "type": "integer",
+      "default": 0
+    }
+  },
+  "additionalProperties": false
+}
