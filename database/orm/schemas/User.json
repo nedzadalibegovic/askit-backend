@@ -23,7 +23,8 @@
     },
     "Password": {
       "$id": "#/properties/Password",
-      "type": "string"
+      "type": "string",
+      "minLength": 5
     },
     "Token": {
       "$id": "#/properties/Token",
