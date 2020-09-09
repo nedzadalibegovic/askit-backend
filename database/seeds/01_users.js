@@ -15,6 +15,7 @@ exports.seed = function (knex) {
       LastName: "Doe",
       Email: "jane.doe@yahoo.com",
       Password: bcrypt.hashSync("P@ssw0rd!", 12),
+      AnswerCount: 1,
     },
   ]);
 };
