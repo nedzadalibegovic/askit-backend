@@ -1,7 +1,10 @@
 const { Model } = require("objection");
+const Password = require("objection-password")({
+  passwordField: "Password",
+});
 const schema = require("../schemas/User.json");
 
-class User extends Model {
+class User extends Password(Model) {
   static get tableName() {
     return "Users";
   }
