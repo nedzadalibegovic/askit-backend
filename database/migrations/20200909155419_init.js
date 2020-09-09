@@ -6,13 +6,8 @@ exports.up = function (knex) {
       table.string("LastName");
       table.string("Email").unique().notNullable();
       table.string("Password").notNullable();
+      table.string("Token");
       table.integer("AnswerCount").defaultTo(0);
-    })
-    .createTable("Tokens", (table) => {
-      table.integer("UserID").unsigned();
-      table.string("Token").notNullable();
-      table.primary("UserID");
-      table.foreign("UserID").references("Users.UserID");
     })
     .createTable("Questions", (table) => {
       table.increments("QuestionID");
@@ -58,6 +53,5 @@ exports.down = function (knex) {
     .dropTable("QuestionRatings")
     .dropTable("Answers")
     .dropTable("Questions")
-    .dropTable("Tokens")
     .dropTable("Users");
 };
