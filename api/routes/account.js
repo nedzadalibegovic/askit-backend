@@ -6,7 +6,12 @@ const verifyAccessToken = require("../middlewares/verifyAccessToken");
 // This route should be used to create (register) a new user
 router.post("/", async (req, res, next) => {
   try {
-    const user = await User.query().insertAndFetch(req.body);
+    const user = await User.query().insertAndFetch({
+      FirstName: req.body.FirstName,
+      LastName: req.body.LastName,
+      Email: req.body.Email,
+      Password: req.body.Password,
+    });
 
     res.json(user);
   } catch (err) {
@@ -17,10 +22,12 @@ router.post("/", async (req, res, next) => {
 // This route should be used to modify data of an existing user
 router.put("/", verifyAccessToken, async (req, res, next) => {
   try {
-    const user = await User.query().patchAndFetchById(
-      res.locals.UserID,
-      req.body
-    );
+    const user = await User.query().patchAndFetchById(res.locals.UserID, {
+      FirstName: req.body.FirstName,
+      LastName: req.body.LastName,
+      Email: req.body.Email,
+      Password: req.body.Password,
+    });
 
     res.json(user);
   } catch (err) {

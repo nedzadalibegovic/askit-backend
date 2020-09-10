@@ -1,10 +1,12 @@
-const { Model } = require("objection");
+const { mixin, Model } = require("objection");
+const Visibilty = require("objection-visibility").default;
 const Password = require("objection-password")({
   passwordField: "Password",
 });
+
 const schema = require("../schemas/User.json");
 
-class User extends Password(Model) {
+class User extends mixin(Model, [Visibilty, Password]) {
   static get tableName() {
     return "Users";
   }
@@ -15,6 +17,10 @@ class User extends Password(Model) {
 
   static get jsonSchema() {
     return schema;
+  }
+
+  static get hidden() {
+    return ["Password", "Token"];
   }
 
   static get relationMappings() {
