@@ -7,22 +7,24 @@ exports.up = function (knex) {
       table.string("Email").unique().notNullable();
       table.string("Password").notNullable();
       table.string("Token");
-      table.integer("AnswerCount").defaultTo(0);
+      table.integer("AnswerCount").unsigned().defaultTo(0);
     })
     .createTable("Questions", (table) => {
       table.increments("QuestionID");
       table.string("Title").notNullable();
       table.text("Body");
       table.integer("UserID").unsigned().notNullable();
-      table.integer("AnswerCount").defaultTo(0);
-      table.integer("RatingCount").defaultTo(0);
+      table.integer("AnswerCount").unsigned().defaultTo(0);
+      table.integer("LikeCount").unsigned().defaultTo(0);
+      table.integer("DislikeCount").unsigned().defaultTo(0);
       table.foreign("UserID").references("Users.UserID").onDelete("CASCADE");
     })
     .createTable("Answers", (table) => {
       table.integer("QuestionID").unsigned();
       table.integer("UserID").unsigned();
       table.text("Body").notNullable();
-      table.integer("RatingCount").defaultTo(0);
+      table.integer("LikeCount").unsigned().defaultTo(0);
+      table.integer("DislikeCount").unsigned().defaultTo(0);
       table.primary(["QuestionID", "UserID"]);
       table
         .foreign("QuestionID")

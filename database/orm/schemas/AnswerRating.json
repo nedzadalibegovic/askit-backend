@@ -18,7 +18,8 @@
     },
     "Rating": {
       "$id": "#/properties/Rating",
-      "type": "string"
+      "type": "string",
+      "enum": ["Like", "Dislike"]
     }
   },
   "additionalProperties": false

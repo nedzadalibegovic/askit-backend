@@ -16,8 +16,13 @@
       "$id": "#/properties/Body",
       "type": "string"
     },
-    "RatingCount": {
-      "$id": "#/properties/RatingCount",
+    "LikeCount": {
+      "$id": "#/properties/LikeCount",
+      "type": "integer",
+      "default": 0
+    },
+    "DislikeCount": {
+      "$id": "#/properties/DislikeCount",
       "type": "integer",
       "default": 0
     }

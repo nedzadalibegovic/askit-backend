@@ -6,7 +6,6 @@ exports.seed = function (knex) {
       Body:
         "This question pertains to the significance of living or existence in general.",
       UserID: 1,
-      AnswerCount: 1,
     },
   ]);
 };
