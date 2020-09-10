@@ -5,6 +5,8 @@ const routes = {
   token: require("./api/routes/token"),
   questions: require("./api/routes/questions"),
   users: require("./api/routes/users"),
+  answers: require("./api/routes/answers"),
+  ratings: require("./api/routes/ratings"),
 };
 const middlewares = {
   notFound: require("./api/middlewares/notFound"),
@@ -27,6 +29,8 @@ app.use("/token", routes.token);
 // resource routes
 app.use("/questions", routes.questions);
 app.use("/users", routes.users);
+app.use("/answers", routes.answers);
+app.use("/ratings", routes.ratings);
 
 // error handling routes
 app.use(middlewares.notFound);

@@ -5,6 +5,8 @@ const sha256 = require("crypto-js/sha256");
 const jwt = require("../helpers/jwt");
 const User = require("../../database/orm/models/User");
 
+// protected route, used to get new access tokens
+// user must have a valid refreshToken cookie
 router.get("/", cookieParser(), async (req, res, next) => {
   try {
     const { refreshToken } = req.cookies;
