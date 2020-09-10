@@ -1,8 +1,10 @@
 const express = require("express");
 const routes = {
-  user: require("./api/routes/user"),
+  account: require("./api/routes/account"),
   login: require("./api/routes/login"),
   token: require("./api/routes/token"),
+  questions: require("./api/routes/questions"),
+  users: require("./api/routes/users"),
 };
 const middlewares = {
   notFound: require("./api/middlewares/notFound"),
@@ -17,10 +19,14 @@ const app = express();
 
 app.use(express.json());
 
-// resource routes
-app.use("/user", routes.user);
+// account routes
+app.use("/account", routes.account);
 app.use("/login", routes.login);
 app.use("/token", routes.token);
+
+// resource routes
+app.use("/questions", routes.questions);
+app.use("/users", routes.users);
 
 // error handling routes
 app.use(middlewares.notFound);
