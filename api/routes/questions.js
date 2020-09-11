@@ -71,6 +71,7 @@ router.get("/latest", async (req, res, next) => {
 
   try {
     const questions = await Question.query()
+      .withGraphFetched("user")
       .orderBy("QuestionID", "desc")
       .page(page, size);
 
@@ -87,6 +88,7 @@ router.get("/popular", async (req, res, next) => {
 
   try {
     const questions = await Question.query()
+      .withGraphFetched("user")
       .orderBy("LikeCount", "desc")
       .page(page, size);
 
