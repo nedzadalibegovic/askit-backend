@@ -1,4 +1,6 @@
 const express = require("express");
+const cors = require("cors");
+
 const routes = {
   account: require("./api/routes/account"),
   login: require("./api/routes/login"),
@@ -20,6 +22,12 @@ require("./database/connection");
 const app = express();
 
 app.use(express.json());
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 
 // account routes
 app.use("/account", routes.account);
