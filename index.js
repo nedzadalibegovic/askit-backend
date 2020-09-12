@@ -1,14 +1,15 @@
 const express = require("express");
 const cors = require("cors");
+const morgan = require("morgan");
 
 const routes = {
   account: require("./api/routes/account"),
   login: require("./api/routes/login"),
   token: require("./api/routes/token"),
   questions: require("./api/routes/questions"),
-  users: require("./api/routes/users"),
   answers: require("./api/routes/answers"),
   ratings: require("./api/routes/ratings"),
+  public: require("./api/routes/public"),
 };
 const middlewares = {
   notFound: require("./api/middlewares/notFound"),
@@ -28,6 +29,7 @@ app.use(
     credentials: true,
   })
 );
+app.use(morgan("dev"));
 
 // account routes
 app.use("/account", routes.account);
@@ -35,8 +37,8 @@ app.use("/login", routes.login);
 app.use("/token", routes.token);
 
 // resource routes
+app.use("/public", routes.public);
 app.use("/questions", routes.questions);
-app.use("/users", routes.users);
 app.use("/answers", routes.answers);
 app.use("/ratings", routes.ratings);
 

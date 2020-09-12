@@ -4,6 +4,23 @@ const Question = require("../../database/orm/models/Question");
 const User = require("../../database/orm/models/User");
 const verifyAccessToken = require("../middlewares/verifyAccessToken");
 
+// protected route, used to get user's last 20 questions
+router.get("/", verifyAccessToken, async (req, res, next) => {
+  const page = req.query.page || 0;
+  const size = req.query.size || 20;
+
+  try {
+    const questions = await User.relatedQuery("questions")
+      .for(res.locals.UserID)
+      .orderBy("QuestionID", "desc")
+      .page(page, size);
+
+    res.json(questions);
+  } catch (err) {
+    next(err);
+  }
+});
+
 // protected route, used to add a new question
 router.post("/", verifyAccessToken, async (req, res, next) => {
   try {
@@ -12,6 +29,17 @@ router.post("/", verifyAccessToken, async (req, res, next) => {
       Body: req.body.Body,
       UserID: res.locals.UserID,
     });
+
+    res.json(question);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// public route, used to get a specific question
+router.get("/:QuestionID", async (req, res, next) => {
+  try {
+    const question = await Question.query().findById(req.params.QuestionID);
 
     res.json(question);
   } catch (err) {
@@ -42,57 +70,6 @@ router.delete("/:QuestionID", verifyAccessToken, async (req, res, next) => {
     const deleteRows = await Question.query().deleteById(req.params.QuestionID);
 
     res.json({ deleteRows });
-  } catch (err) {
-    next(err);
-  }
-});
-
-// protected route, used to get user's last 20 questions
-router.get("/my", verifyAccessToken, async (req, res, next) => {
-  const page = req.query.page || 0;
-  const size = req.query.size || 20;
-
-  try {
-    const questions = await User.relatedQuery("questions")
-      .for(res.locals.UserID)
-      .orderBy("QuestionID", "desc")
-      .page(page, size);
-
-    res.json(questions);
-  } catch (err) {
-    next(err);
-  }
-});
-
-// public route, used to get the latest 20 questions
-router.get("/latest", async (req, res, next) => {
-  const page = req.query.page || 0;
-  const size = req.query.size || 20;
-
-  try {
-    const questions = await Question.query()
-      .withGraphFetched("user")
-      .orderBy("QuestionID", "desc")
-      .page(page, size);
-
-    res.json(questions);
-  } catch (err) {
-    next(err);
-  }
-});
-
-// public route, used to get the 20 most-liked questions
-router.get("/popular", async (req, res, next) => {
-  const page = req.query.page || 0;
-  const size = req.query.size || 20;
-
-  try {
-    const questions = await Question.query()
-      .withGraphFetched("user")
-      .orderBy("LikeCount", "desc")
-      .page(page, size);
-
-    res.json(questions);
   } catch (err) {
     next(err);
   }
