@@ -39,7 +39,13 @@ router.post("/", verifyAccessToken, async (req, res, next) => {
 // public route, used to get a specific question
 router.get("/:QuestionID", async (req, res, next) => {
   try {
-    const question = await Question.query().findById(req.params.QuestionID);
+    const eager = {
+      ...(req.query.user == "true" && { user: true }),
+      ...(req.query.answers == "true" && { answers: true }),
+    };
+    const question = await Question.query()
+      .findById(req.params.QuestionID)
+      .withGraphFetched(eager);
 
     res.json(question);
   } catch (err) {

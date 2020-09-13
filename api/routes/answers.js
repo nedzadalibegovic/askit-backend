@@ -58,8 +58,14 @@ router.get("/:QuestionID", async (req, res, next) => {
   const page = req.query.page || 0;
   const size = req.query.size || 20;
 
+  const eager = {
+    ...(req.query.user == "true" && { user: true }),
+  };
+
   try {
     const answers = await Question.relatedQuery("answers")
+      .withGraphFetched(eager)
+      .orderBy("LikeCount")
       .for(req.params.QuestionID)
       .page(page, size);
 
