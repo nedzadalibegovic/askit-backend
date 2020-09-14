@@ -64,7 +64,7 @@ router.get("/:QuestionID", addFilterID, async (req, res, next) => {
     if (req.query.user == "true") query.withGraphFetched("user");
     if (res.locals.FilterID) {
       query.withGraphFetched("ratings").modifyGraph("ratings", (builder) => {
-        builder.where("AnswerUserID", res.locals.FilterID);
+        builder.where("RatingUserID", res.locals.FilterID);
       });
     }
 
