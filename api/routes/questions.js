@@ -1,8 +1,9 @@
 const router = require("express").Router();
 
 const Question = require("../../database/orm/models/Question");
-const User = require("../../database/orm/models/User");
 const verifyAccessToken = require("../middlewares/verifyAccessToken");
+const addFilterID = require("../middlewares/addFilterID");
+const getRatings = require("../helpers/getRatings");
 
 // protected route, used to get user's last 20 questions
 router.get("/", verifyAccessToken, async (req, res, next) => {
@@ -10,12 +11,12 @@ router.get("/", verifyAccessToken, async (req, res, next) => {
   const size = req.query.size || 20;
 
   try {
-    const questions = await User.relatedQuery("questions")
-      .for(res.locals.UserID)
-      .orderBy("QuestionID", "desc")
-      .page(page, size);
+    const questions = Question.query().where("UserID", res.locals.UserID);
 
-    res.json(questions);
+    getRatings(questions, res.locals.UserID);
+    questions.orderBy("QuestionID", "desc").page(page, size);
+
+    res.json(await questions);
   } catch (err) {
     next(err);
   }
@@ -37,17 +38,15 @@ router.post("/", verifyAccessToken, async (req, res, next) => {
 });
 
 // public route, used to get a specific question
-router.get("/:QuestionID", async (req, res, next) => {
+router.get("/:QuestionID", addFilterID, async (req, res, next) => {
   try {
-    const eager = {
-      ...(req.query.user == "true" && { user: true }),
-      ...(req.query.answers == "true" && { answers: true }),
-    };
-    const question = await Question.query()
-      .findById(req.params.QuestionID)
-      .withGraphFetched(eager);
+    const question = Question.query().findById(req.params.QuestionID);
 
-    res.json(question);
+    if (req.query.user == "true") question.withGraphFetched("user");
+    if (req.query.answers == "true") question.withGraphFetched("answers");
+    if (res.locals.FilterID) getRatings(question, res.locals.FilterID);
+
+    res.json(await question);
   } catch (err) {
     next(err);
   }

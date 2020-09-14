@@ -29,7 +29,6 @@ app.use(
     credentials: true,
   })
 );
-app.use(morgan("dev"));
 
 // account routes
 app.use("/account", routes.account);

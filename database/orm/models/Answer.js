@@ -43,7 +43,7 @@ class Answer extends Model {
         modelClass: AnswerRating,
         join: {
           from: ["Answers.QuestionID", "Answers.UserID"],
-          to: ["AnswerRatings.QuestionID", "AnswerRatings.UserID"],
+          to: ["AnswerRatings.QuestionID", "AnswerRatings.AnswerUserID"],
         },
       },
     };

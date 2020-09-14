@@ -2,6 +2,11 @@ const router = require("express").Router();
 
 const Question = require("../../database/orm/models/Question");
 const User = require("../../database/orm/models/User");
+const addFilterID = require("../middlewares/addFilterID");
+const getRatings = require("../helpers/getRatings");
+
+// add FilterID for any authenticated requests
+router.use(addFilterID);
 
 // public route, used to get the latest 20 questions
 router.get("/latest-questions", async (req, res, next) => {
@@ -9,12 +14,13 @@ router.get("/latest-questions", async (req, res, next) => {
   const size = req.query.size || 20;
 
   try {
-    const questions = await Question.query()
-      .withGraphFetched("user")
-      .orderBy("QuestionID", "desc")
-      .page(page, size);
+    const questions = Question.query().withGraphFetched("user");
 
-    res.json(questions);
+    if (res.locals.FilterID) getRatings(questions, res.locals.FilterID);
+
+    questions.orderBy("QuestionID", "desc").page(page, size);
+
+    res.json(await questions);
   } catch (err) {
     next(err);
   }
@@ -26,12 +32,13 @@ router.get("/popular-questions", async (req, res, next) => {
   const size = req.query.size || 20;
 
   try {
-    const questions = await Question.query()
-      .withGraphFetched("user")
-      .orderBy("LikeCount", "desc")
-      .page(page, size);
+    const questions = Question.query().withGraphFetched("user");
 
-    res.json(questions);
+    if (res.locals.FilterID) getRatings(questions, res.locals.FilterID);
+
+    questions.orderBy("LikeCount", "desc").page(page, size);
+
+    res.json(await questions);
   } catch (err) {
     next(err);
   }
