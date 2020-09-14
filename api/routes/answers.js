@@ -36,10 +36,10 @@ router.put("/", verifyAccessToken, async (req, res, next) => {
 });
 
 // protected route, used to delete an answer
-router.delete("/", verifyAccessToken, async (req, res, next) => {
+router.delete("/:QuestionID", verifyAccessToken, async (req, res, next) => {
   try {
     const deletedRows = await Answer.query().deleteById([
-      req.body.QuestionID,
+      req.params.QuestionID,
       res.locals.UserID,
     ]);
 
