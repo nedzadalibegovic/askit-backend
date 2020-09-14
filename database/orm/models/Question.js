@@ -43,7 +43,7 @@ class Question extends Model {
         modelClass: QuestionRating,
         join: {
           from: "Questions.QuestionID",
-          to: "QuestionRating.QuestionID",
+          to: "QuestionRatings.QuestionID",
         },
       },
     };
