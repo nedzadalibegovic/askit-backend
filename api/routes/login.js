@@ -21,6 +21,7 @@ router.post("/", async (req, res, next) => {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production" ? true : false,
+      maxAge: 2592000000, // 30 days
     });
     res.json({ accessToken });
   } catch (err) {
