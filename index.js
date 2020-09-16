@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+const http = require("http");
+const socketio = require("socket.io");
 
 const routes = {
   account: require("./api/routes/account"),
@@ -20,6 +22,18 @@ const middlewares = {
 require("./database/connection");
 
 const app = express();
+const server = http.createServer(app);
+const io = socketio(server);
+
+// each user shall have a room under his own id
+io.on("connection", (socket) => {
+  socket.on("join", (userId) => {
+    socket.join(userId);
+  });
+});
+
+// add to app.locals so we can use in other parts of server
+app.locals.io = io;
 
 app.use(express.json());
 app.use(
@@ -45,4 +59,4 @@ app.use(middlewares.notFound);
 app.use(middlewares.errorResponseCode);
 app.use(middlewares.errorHandler);
 
-app.listen(process.env.PORT);
+server.listen(process.env.PORT);

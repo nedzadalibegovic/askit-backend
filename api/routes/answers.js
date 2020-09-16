@@ -3,6 +3,7 @@ const router = require("express").Router();
 const Answer = require("../../database/orm/models/Answer");
 const verifyAccessToken = require("../middlewares/verifyAccessToken");
 const addFilterID = require("../middlewares/addFilterID");
+const Question = require("../../database/orm/models/Question");
 
 // protected route, used to give an answer to a question
 router.post("/", verifyAccessToken, async (req, res, next) => {
@@ -12,6 +13,13 @@ router.post("/", verifyAccessToken, async (req, res, next) => {
       UserID: res.locals.UserID,
       Body: req.body.Body,
     });
+
+    // find user and send notifcation
+    const { UserID } = await Question.query()
+      .findById(answer.QuestionID)
+      .select("UserID");
+
+    req.app.locals.io.to(UserID).emit("notification", answer);
 
     res.json(answer);
   } catch (err) {
