@@ -22,6 +22,22 @@ router.post("/answer", verifyAccessToken, async (req, res, next) => {
   }
 });
 
+// protected route, to be used when changing answer rating (i.e. from like to dislike)
+router.put("/answer", verifyAccessToken, async (req, res, next) => {
+  try {
+    const rating = await AnswerRating.query().patchAndFetchById(
+      [req.body.QuestionID, req.body.UserID, res.locals.UserID],
+      {
+        Rating: req.body.Rating,
+      }
+    );
+
+    res.json(rating);
+  } catch (err) {
+    next(err);
+  }
+});
+
 // protected route, to be used when deleting an answer rating
 router.delete("/answer", verifyAccessToken, async (req, res, next) => {
   try {
@@ -51,6 +67,20 @@ router.post("/question", verifyAccessToken, async (req, res, next) => {
       UserID: res.locals.UserID,
       Rating: req.body.Rating,
     });
+
+    res.json(rating);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// protected route, to be used when changing question rating (i.e. from like to dislike)
+router.put("/question", verifyAccessToken, async (req, res, next) => {
+  try {
+    const rating = await QuestionRating.query().patchAndFetchById(
+      [req.body.QuestionID, res.locals.UserID],
+      { Rating: req.body.Rating }
+    );
 
     res.json(rating);
   } catch (err) {
