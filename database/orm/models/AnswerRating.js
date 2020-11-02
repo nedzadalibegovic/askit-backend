@@ -23,8 +23,8 @@ class AnswerRating extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: Answer,
         join: {
-          from: "AnswerRatings.AnswerID",
-          to: "Answers.AnswerID",
+          from: ["AnswerRatings.QuestionID", "AnswerRatings.AnswerUserID"],
+          to: ["Answers.QuestionID", "Answers.UserID"],
         },
       },
 
