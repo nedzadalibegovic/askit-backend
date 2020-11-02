@@ -8,10 +8,16 @@ const Question = require("../../database/orm/models/Question");
 // protected route, used to give an answer to a question
 router.post("/", verifyAccessToken, async (req, res, next) => {
   try {
-    const answer = await Answer.query().insertAndFetch({
-      QuestionID: req.body.QuestionID,
-      UserID: res.locals.UserID,
-      Body: req.body.Body,
+    const answer = await Answer.transaction(async (trx) => {
+      const answer = await Answer.query(trx).insertAndFetch({
+        QuestionID: req.body.QuestionID,
+        UserID: res.locals.UserID,
+        Body: req.body.Body,
+      });
+
+      await answer.$relatedQuery("question", trx).increment("AnswerCount", 1);
+
+      return answer;
     });
 
     // find user and send notifcation
@@ -46,10 +52,16 @@ router.put("/", verifyAccessToken, async (req, res, next) => {
 // protected route, used to delete an answer
 router.delete("/:QuestionID", verifyAccessToken, async (req, res, next) => {
   try {
-    const deletedRows = await Answer.query().deleteById([
-      req.params.QuestionID,
-      res.locals.UserID,
-    ]);
+    const deletedRows = await Answer.transaction(async (trx) => {
+      const answer = await Answer.query(trx).findById([
+        req.params.QuestionID,
+        res.locals.UserID,
+      ]);
+
+      await answer.$relatedQuery("question", trx).decrement("AnswerCount", 1);
+
+      return answer.$query(trx).delete();
+    });
 
     if (deletedRows > 0) {
       res.json({ message: "Answer deleted" });
