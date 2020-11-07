@@ -3,6 +3,7 @@ const cors = require("cors");
 const http = require("http");
 const socketio = require("socket.io");
 
+const { verifyAccessToken } = require("./api/helpers/jwt");
 const routes = {
   account: require("./api/routes/account"),
   login: require("./api/routes/login"),
@@ -27,8 +28,14 @@ const io = socketio(server);
 
 // each user shall have a room under his own id
 io.on("connection", (socket) => {
-  socket.on("join", (userId) => {
-    socket.join(userId);
+  socket.on("join", (token) => {
+    try {
+      const { UserID } = verifyAccessToken(token);
+
+      socket.join(UserID);
+    } catch {
+      socket.disconnect();
+    }
   });
 });
 
