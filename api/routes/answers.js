@@ -15,6 +15,7 @@ router.post("/", verifyAccessToken, async (req, res, next) => {
         Body: req.body.Body,
       });
 
+      await answer.$relatedQuery("user", trx).increment("AnswerCount", 1);
       await answer.$relatedQuery("question", trx).increment("AnswerCount", 1);
 
       return answer;
@@ -58,6 +59,7 @@ router.delete("/:QuestionID", verifyAccessToken, async (req, res, next) => {
         res.locals.UserID,
       ]);
 
+      await answer.$relatedQuery("user", trx).decrement("AnswerCount", 1);
       await answer.$relatedQuery("question", trx).decrement("AnswerCount", 1);
 
       return answer.$query(trx).delete();
