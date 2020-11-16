@@ -2,14 +2,14 @@
 version: "3.8"
 services:
   db:
-    image: mysql
+    image: postgres:alpine
     volumes:
-      - db-data:/var/lib/mysql
+      - db-data:/var/lib/postgresql/data
     ports:
-      - "3306:3306"
+      - "5432:5432"
     environment:
-      MYSQL_DATABASE: askit
-      MYSQL_ROOT_PASSWORD: P@ssw0rd!
+      POSTGRES_DB: askit
+      POSTGRES_PASSWORD: P@ssw0rd!
 
   adminer:
     image: adminer

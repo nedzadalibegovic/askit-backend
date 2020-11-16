@@ -1,9 +1,9 @@
 module.exports = {
   development: {
-    client: "mysql2",
+    client: "pg",
     connection: {
       host: "localhost",
-      user: "root",
+      user: "postgres",
       password: "P@ssw0rd!",
       database: "askit",
     },
@@ -16,7 +16,7 @@ module.exports = {
   },
 
   production: {
-    client: "mysql2",
+    client: "pg",
     connection: process.env.DATABASE_URL,
     migrations: {
       directory: "./database/migrations",
