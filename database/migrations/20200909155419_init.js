@@ -50,12 +50,9 @@ exports.up = function (knex) {
       table.enu("Rating", ["Like", "Dislike"]).notNullable();
       table.primary(["QuestionID", "AnswerUserID", "RatingUserID"]);
       table
-        .foreign("QuestionID")
-        .references("Answers.QuestionID")
-        .onDelete("CASCADE");
-      table
-        .foreign("AnswerUserID")
-        .references("Answers.UserID")
+        .foreign(["QuestionID", "AnswerUserID"])
+        .references(["QuestionID", "UserID"])
+        .inTable("Answers")
         .onDelete("CASCADE");
       table
         .foreign("RatingUserID")
