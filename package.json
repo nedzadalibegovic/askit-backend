@@ -20,7 +20,7 @@
     "objection-password": "^3.0.0",
     "objection-visibility": "^1.1.0",
     "pg": "^8.5.1",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.4.0"
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
